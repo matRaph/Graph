@@ -74,5 +74,60 @@ namespace Graph
             Matrix[from][to].Remove(Matrix[from][to].Find(x => x.Value.Equals(edge)));
         }
 
+        public List<Edge> Edges(){
+            List<Edge> edges = new List<Edge>();
+            for (int i = 0; i < Matrix.Count; i++)
+            {
+                for (int j = 0; j < Matrix[i].Count; j++)
+                {
+                    for (int k = 0; k < Matrix[i][j].Count; k++)
+                    {
+                        edges.Add(Matrix[i][j][k]);
+                    }
+                }
+            }
+            return edges;
+        }
+        
+        internal Vertex[] FinalVertices(Edge edge){
+            for (int i = 0; i < Matrix.Count; i++)
+            {
+                for (int j = 0; j < Matrix[i].Count; j++)
+                {
+                    for (int k = 0; k < Matrix[i][j].Count; k++)
+                    {
+                        if (Matrix[i][j][k].Equals(edge))
+                        {
+                            return new Vertex[]{Vertices[i], Vertices[j]};
+                        }
+                    }
+                }
+            }
+            throw new Exception("Aresta nao encontrada");
+        }
+
+        internal Vertex Oposite(Vertex vertex, Edge edge){
+            Vertex[] vertices = FinalVertices(edge);
+            if (vertices[0].Equals(vertex))
+            {
+                return vertices[1];
+            }
+            else if (vertices[1].Equals(vertex))
+            {
+                return vertices[0];
+            }
+            else
+            {
+                throw new Exception("Vertice nao encontrado");
+            }
+        }
+        public bool AreAdjacent(object initial, object final){
+            int from = FindVertex(initial);
+            int to = FindVertex(final);
+
+            return Matrix[from][to].Count > 0;
+        }
+
+        //TODO arestasIncidentes(v)
     }
 }
