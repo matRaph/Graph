@@ -18,7 +18,7 @@ namespace Graph
         }
 
         //Adiciona um vertice
-        internal void AddVertex(object label)
+        public void AddVertex(object label)
         {
             Vertices.Add(new Vertex(label));
             //Aumenta a matriz
@@ -34,24 +34,17 @@ namespace Graph
         }
 
         //Adiciona uma aresta
-        internal void AddEdge(object labelVertex1, object labelVertex2, object edge)
+        public void AddEdge(object initial, object final, object edge)
         {
-            int indexVertex1 = FindVertice(labelVertex1);
-            int indexVertex2 = FindVertice(labelVertex2);
-
-            //Verifica se os vertices existem
-            if (indexVertex1 == -1 || indexVertex2 == -1)
-            {
-                throw new Exception("Vertice nao encontrado");
-            }
-
+            int indexVertex1 = FindVertex(initial);
+            int indexVertex2 = FindVertex(final);
             //Adiciona a aresta na matriz
             Matrix[indexVertex1][indexVertex2].Add(new Edge(edge));
 
         }
 
         //Encontra um vertice
-        private int FindVertice(object label){
+        private int FindVertex(object label){
             for (int i = 0; i < Vertices.Count; i++)
             {
                 if (Vertices[i].Label.Equals(label))
@@ -59,19 +52,27 @@ namespace Graph
                     return i;
                 }
             }
-            return -1;
+            throw new Exception("Vertice nao encontrado");
+        }
+        public void RemoveVertex(object label){
+            int index = FindVertex(label);
+
+            Vertices.RemoveAt(index);
+
+            Matrix.RemoveAt(index);
+
+            for (int i = 0; i < Matrix.Count; i++)
+            {
+                Matrix[i].RemoveAt(index);
+            }
         }
 
-        // public void PrintMatrix()
-        // {
-        //     for (int i = 0; i < Matrix.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < Matrix.GetLength(1); j++)
-        //         {
-        //             Console.Write(Matrix[i, j] + " ");
-        //         }
-        //         Console.WriteLine();
-        //     }
-        // }
+        public void RemoveEdge(object initial, object final, object edge){
+            int from = FindVertex(initial);
+            int to = FindVertex(final);
+
+            Matrix[from][to].Remove(Matrix[from][to].Find(x => x.Value.Equals(edge)));
+        }
+
     }
 }
