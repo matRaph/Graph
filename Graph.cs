@@ -105,6 +105,22 @@ namespace Graph
             }
             throw new Exception("Aresta nao encontrada");
         }
+
+        internal Vertex Oposite(Vertex vertex, Edge edge){
+            Vertex[] vertices = FinalVertices(edge);
+            if (vertices[0].Equals(vertex))
+            {
+                return vertices[1];
+            }
+            else if (vertices[1].Equals(vertex))
+            {
+                return vertices[0];
+            }
+            else
+            {
+                throw new Exception("Vertice nao encontrado");
+            }
+        }
         public bool AreAdjacent(object initial, object final){
             int from = FindVertex(initial);
             int to = FindVertex(final);
@@ -112,6 +128,6 @@ namespace Graph
             return Matrix[from][to].Count > 0;
         }
 
-
+        //TODO arestasIncidentes(v)
     }
 }
